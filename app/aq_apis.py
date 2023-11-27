@@ -1,8 +1,8 @@
 from flask_restx import Resource, Namespace, reqparse
-from .extensions import api, auth
+from .extensions import api
+from .authentication import auth
 from flask import jsonify
 import psycopg2
-
 
 Airquality_apis= Namespace('airquality')
 
@@ -28,6 +28,7 @@ def getStationId(stationName):
 @Airquality_apis.route('/api/stations')
 class AllStations(Resource):
     @api.doc(description='Get all info about every station we have in the database')
+    @auth.login_required
     def get(self):
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM airqualitystation')
@@ -74,6 +75,7 @@ class AllStations(Resource):
 @Airquality_apis.route('/api/stations/<stationName>')
 class StationInfo(Resource):
     @api.doc(description='Get all info about a specific station we have in the database')
+    @auth.login_required
     def get(self, stationName):
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM airqualitystation WHERE stationname = %s', (stationName,))
@@ -115,6 +117,7 @@ class StationInfo(Resource):
 @Airquality_apis.route('/api/telemetry/<stationName>/values/lasthour')
 class AllValuesLastHour(Resource):
     @api.doc(description='gets the value in the last hour for each element and for the specific station')
+    @auth.login_required
     def get(self, stationName):
         cursor = conn.cursor()
         
@@ -146,6 +149,7 @@ parser.add_argument('selectedElements', type=int, action='split', help='List of 
 class SelectedData(Resource):
     @api.doc(description='retrives information about AQ values for a list of specified elements in the specified timeframe')
     @api.expect(parser)
+    @auth.login_required
     def get(self, stationName, timeframe):
         
         cursor = conn.cursor()
@@ -172,6 +176,7 @@ class SelectedData(Resource):
 @Airquality_apis.route('/api/telemetry/values/<elementAbbreviation>/<stationName>/<fromDate>/<toDate>')
 class SelectedDatetime(Resource):
     @api.doc(description = 'get specific element values fromdate todate included')
+    @auth.login_required
     def get(self, elementAbbreviation, stationName, fromDate, toDate):
         cursor = conn.cursor()
         
@@ -198,6 +203,7 @@ class SelectedDatetime(Resource):
 class SelectedDatetimeValues(Resource):
     @api.doc(description = 'get elements values fromdate todate included')
     @api.expect(parser)
+    @auth.login_required
     def get(self, stationName, fromDate, toDate):
         
         cursor = conn.cursor()
