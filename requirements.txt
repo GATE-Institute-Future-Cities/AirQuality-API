@@ -1,0 +1,6 @@
+flask==*
+flask-restx==*
+flask-sqlalchemy==*
+python-dotenv==*
+psycopg2==*
+Flask-HTTPAuth==*
