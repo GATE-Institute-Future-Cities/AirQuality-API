@@ -1,5 +1,5 @@
 from flask_restx import Resource, Namespace, reqparse
-from .extensions import api
+from .extensions import api, auth
 from flask import jsonify
 import psycopg2
 
