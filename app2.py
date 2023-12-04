@@ -245,3 +245,10 @@ class SelectedDatetimeValues(Resource):
         })
             
         
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:mohi1234@localhost/ExEa_main'
+
+api.init_app(app)
+db.init_app(app)
+api.add_namespace(Airquality_apis)
+
+
