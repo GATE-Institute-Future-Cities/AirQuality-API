@@ -17,6 +17,16 @@ Airquality_apis= Namespace('airquality')
 
 conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
 
+users= {
+    'mo': '123',
+}
+
+@auth.get_password
+def get_pw(username):
+    if username in users:
+        return users.get(username)
+    return None
+
 
 def get_paramName(paramIds): ### function that gets all the ids for all the elements that we recive from the db and serches for the paramabreviation in the paramtype table
     cursor = conn.cursor()
@@ -254,15 +264,6 @@ api.add_namespace(Airquality_apis)
 app.config['SECRET_KEY'] = os.urandom(24) ## random secret KEY
 
 
-users= {
-    'mo': '123',
-}
-
-@auth.get_password
-def get_pw(username):
-    if username in users:
-        return users.get(username)
-    return None
 
 if __name__ == "__main__":
     app.run()
