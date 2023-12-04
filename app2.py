@@ -254,6 +254,15 @@ api.add_namespace(Airquality_apis)
 app.config['SECRET_KEY'] = os.urandom(24) ## random secret KEY
 
 
+users= {
+    'mo': '123',
+}
+
+@auth.get_password
+def get_pw(username):
+    if username in users:
+        return users.get(username)
+    return None
 
 if __name__ == "__main__":
     app.run()
