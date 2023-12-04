@@ -251,4 +251,9 @@ api.init_app(app)
 db.init_app(app)
 api.add_namespace(Airquality_apis)
 
+app.config['SECRET_KEY'] = os.urandom(24) ## random secret KEY
 
+
+
+if __name__ == "__main__":
+    app.run()
