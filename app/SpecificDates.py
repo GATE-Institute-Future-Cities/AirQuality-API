@@ -9,6 +9,26 @@ specifiedDates_apis= Namespace('specifiedDates')
 conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
 
 
+
+def get_paramName(paramIds): ### function that gets all the ids for all the elements that we recive from the db and serches for the paramabreviation in the paramtype table
+    cursor = conn.cursor()
+    all_params = []
+    for param in paramIds:
+        cursor.execute('SELECT parameterabbreviation FROM parametertype WHERE id = %s', (param,))
+        paramname = cursor.fetchone()[0]
+        all_params.append(paramname)
+    return all_params
+
+def getStationId(stationName):
+    cursor = conn.cursor()
+    cursor.execute('SELECT stationid FROM airqualitystation WHERE stationname = %s', (stationName,))
+    stationid = cursor.fetchone()[0]
+    return stationid
+
+# parser to parse the 'selectedElements' query parameter as a list of integers
+parser = reqparse.RequestParser()
+parser.add_argument('selectedElements', type=int, action='split', help='List of selected element ids', required=True)
+
 @specifiedDates_apis.route('/api/telemetry/values/<stationName>/<timeframe>')
 class SelectedData(Resource):
     @api.doc(description='retrives information about AQ values for a list of specified elements in the specified timeframe')
