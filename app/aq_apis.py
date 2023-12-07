@@ -145,31 +145,6 @@ class AllValuesLastHour(Resource):
 parser = reqparse.RequestParser()
 parser.add_argument('selectedElements', type=int, action='split', help='List of selected element ids', required=True)
         
-@Airquality_apis.route('/api/telemetry/values/<elementAbbreviation>/<stationName>/<fromDate>/<toDate>')
-class SelectedDatetime(Resource):
-    @api.doc(description = 'get specific element values fromdate todate included')
-    @auth.login_required
-    def get(self, elementAbbreviation, stationName, fromDate, toDate):
-        cursor = conn.cursor()
-        
-        stationId = getStationId(stationName) ## station id
-        
-        cursor.execute('SELECT id FROM parametertype WHERE parameterabbreviation = %s', (elementAbbreviation,))
-        elementId = cursor.fetchone()[0]
-        
-        cursor.execute('SELECT parametername FROM parametertype WHERE parameterabbreviation = %s', (elementAbbreviation,) )
-        elementName = cursor.fetchone()[0]
-        
-        cursor.execute('SELECT measurementdatetime, measuredvalue FROM airqualityobserved WHERE stationid = %s AND measuredparameterid = %s AND measurementdatetime BETWEEN %s AND %s', (stationId, elementId, fromDate, toDate))
-        data = cursor.fetchall()
-        
-        return jsonify({
-            'element': elementName,
-            'fromDate': fromDate,
-            'toDate': toDate,
-            'values': data,
-            
-        })
         
 @Airquality_apis.route('/api/telemetry/values/elements/<stationName>/<fromDate>/<toDate>')
 class SelectedDatetimeValues(Resource):

@@ -83,3 +83,41 @@ class SelectedDatetime(Resource):
             'values': data,
             
         })
+        
+@specifiedDates_apis.route('/api/telemetry/values/elements/<stationName>/<fromDate>/<toDate>')
+class SelectedDatetimeValues(Resource):
+    @api.doc(description = 'get elements values fromdate todate included')
+    @api.expect(parser)
+    @auth.login_required
+    def get(self, stationName, fromDate, toDate):
+        
+        cursor = conn.cursor()
+        
+        stationId = getStationId(stationName)
+        
+        args = parser.parse_args()
+        selectedElements = args['selectedElements'] ## list of the chosen element ids
+        
+        values = {}     
+        for el in selectedElements:
+            
+            cursor.execute('SELECT measuredvalue FROM airqualityobserved WHERE stationid = %s AND measuredparameterid = %s AND measurementdatetime BETWEEN %s AND %s', (stationId, el, fromDate, toDate))
+            data = cursor.fetchall() ## get the values for the specified element which is el in between the dates inserted including the value from the dates
+            
+            cursor.execute('SELECT parameterabbreviation FROM parametertype WHERE id = %s', (el,) )
+            elementName = cursor.fetchone()[0] ## getting the name abbriviation
+            
+
+            if elementName not in values: ##simple check if the elements is in dict or not
+                values[elementName] = []
+                
+            values[elementName].extend([d[0] for d in data]) ## getting the values as ints instead of a list with the value
+            
+            
+        return jsonify({
+            'FromDate': fromDate,
+            'ToDate': toDate,
+            'Data': values,
+        })
+            
+        
