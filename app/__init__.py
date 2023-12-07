@@ -1,6 +1,7 @@
 from flask import Flask
 from .extensions import api, db
 from .aq_apis import Airquality_apis
+from .SpecificDates import specifiedDates_apis
 import os
 
 
@@ -12,6 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:mohi1234@localhos
 api.init_app(app)
 db.init_app(app)
 api.add_namespace(Airquality_apis)
+api.add_namespace(specifiedDates_apis)
 
 app.config['SECRET_KEY'] = os.urandom(24) ## random secret KEY
 
