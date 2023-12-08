@@ -4,7 +4,7 @@ from .authentication import auth
 from flask import jsonify
 import psycopg2
 
-specifiedDates_apis= Namespace('specifiedDates')
+specifiedDates_apis= Namespace('date')
 
 conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
 
