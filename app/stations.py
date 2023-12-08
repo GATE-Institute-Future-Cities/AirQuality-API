@@ -8,6 +8,20 @@ Station_apis= Namespace('station')
 
 conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
 
+def get_paramName(paramIds): ### function that gets all the ids for all the elements that we recive from the db and serches for the paramabreviation in the paramtype table
+    cursor = conn.cursor()
+    all_params = []
+    for param in paramIds:
+        cursor.execute('SELECT parameterabbreviation FROM parametertype WHERE id = %s', (param,))
+        paramname = cursor.fetchone()[0]
+        all_params.append(paramname)
+    return all_params
+
+def getStationId(stationName):
+    cursor = conn.cursor()
+    cursor.execute('SELECT stationid FROM airqualitystation WHERE stationname = %s', (stationName,))
+    stationid = cursor.fetchone()[0]
+    return stationid
 
 @Station_apis.route('/api/stations')
 class AllStations(Resource):
