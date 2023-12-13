@@ -1,0 +1,4 @@
+config.py
+Pipfile
+Pipfile.lock
+app/__pycache__/*

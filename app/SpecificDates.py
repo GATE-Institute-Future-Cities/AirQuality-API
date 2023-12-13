@@ -3,10 +3,11 @@ from .extensions import api
 from .authentication import auth
 from flask import jsonify
 import psycopg2
+from config import db_config
 
 specifiedDates_apis= Namespace('date')
 
-conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
+conn = psycopg2.connect(**db_config)
 
 
 

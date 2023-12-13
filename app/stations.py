@@ -3,10 +3,11 @@ from .extensions import api
 from .authentication import auth
 from flask import jsonify
 import psycopg2
+from config import db_config
 
 Station_apis= Namespace('station')
 
-conn = psycopg2.connect(database="ExEa_main", user="postgres", password="mohi1234", host="localhost", port="5432")
+conn = psycopg2.connect(**db_config)
 
 def get_paramName(paramIds): ### function that gets all the ids for all the elements that we recive from the db and serches for the paramabreviation in the paramtype table
     cursor = conn.cursor()

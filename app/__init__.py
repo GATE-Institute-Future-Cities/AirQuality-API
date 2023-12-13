@@ -3,12 +3,12 @@ from .extensions import api, db
 from .SpecificDates import specifiedDates_apis
 from .stations import Station_apis
 import os
-
+from config import db_uri
 
     
 app = Flask(__name__) 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:mohi1234@localhost/ExEa_main'
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 
 api.init_app(app)
 db.init_app(app)
